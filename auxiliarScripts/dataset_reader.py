@@ -1,4 +1,5 @@
 import json
+import pandas as pd
 
 class SpotifyPlaylistDataset:
     def __init__(self, verbose=True):
@@ -18,3 +19,7 @@ class SpotifyPlaylistDataset:
         if not (self.current_slice*1000 <= index <= self.current_slice*1000+999):
             self._load_slice(index//1000)
         return self.playlists[index % 1000]
+    
+    def read_playlist_formatted(self, index):
+        playlist = self.read_playlist(index)
+        return pd.DataFrame(playlist['tracks'])
