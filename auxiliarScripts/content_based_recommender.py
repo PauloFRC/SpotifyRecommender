@@ -11,6 +11,7 @@ from sklearn.metrics import davies_bouldin_score, silhouette_score
 import sys
 sys.path.append('../auxiliarScripts')
 from dataset_reader import SpotifyPlaylistDataset
+from yellowbrick.cluster import KElbowVisualizer
 
 tracks = pd.read_csv('../tracks/tracks.csv', index_col='id')
 
@@ -73,9 +74,10 @@ class SimilarityMeans:
         
         return new_km
     
-    def recommend_clusters(self, user_tracks, n_tracks=5):
-        self.tracks = self.tracks.drop(index=user_tracks.index)
-        self.id_tracks = self.id_tracks.drop(index=user_tracks.index)
+    def recommend_clusters(self, user_tracks, n_tracks=5, playlist_in_playlists=True):
+        if playlist_in_playlists:
+            self.tracks = self.tracks.drop(index=user_tracks.index)
+            self.id_tracks = self.id_tracks.drop(index=user_tracks.index)
         
         if len(user_tracks)==1:
             return [self.recommend(user_tracks[0], n_tracks)]
